@@ -10,6 +10,7 @@ BINS = $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%,$(SRCS))
 all: $(BINS)
 
 $(BIN_DIR)/%: $(SRC_DIR)/%.cpp
+	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
