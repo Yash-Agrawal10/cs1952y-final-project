@@ -9,6 +9,7 @@
 
 #include "common/distance.hpp"
 #include "common/io.hpp"
+#include "common/m5_roi.hpp"
 
 struct Args {
     std::string vectors_path = "data/vectors.bin";
@@ -75,19 +76,23 @@ int main(int argc, char** argv) {
     std::cout << "flat search: db_N=" << db.N << " queries_N=" << queries.N << " D=" << db.D << " K=" << args.k << "\n";
 
     uint64_t checksum = 0;
+    std::vector<std::pair<float, uint32_t>> first_query_results;
+
+    M5_ROI_BEGIN();
     for (uint32_t q = 0; q < queries.N; ++q) {
         const auto results = flat_topk(db, queries.vec(q), args.k);
         for (const auto& [dist, idx] : results)
             checksum += idx;
-
-        if (q == 0) {
-            std::cout << "query[0] top-" << args.k << ":";
-            for (const auto& [dist, idx] : results)
-                std::cout << " " << idx << "(" << dist << ")";
-            std::cout << "\n";
-        }
+        if (q == 0) first_query_results = results;
     }
+    M5_ROI_END();
 
+    std::cout << "query[0] top-" << args.k << ":";
+    for (const auto& [dist, idx] : first_query_results)
+        std::cout << " " << idx << "(" << dist << ")";
+    std::cout << "\n";
     std::cout << "checksum: " << checksum << "\n";
+
+    M5_EXIT();
     return 0;
 }
