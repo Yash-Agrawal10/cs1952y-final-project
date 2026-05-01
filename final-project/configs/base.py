@@ -155,13 +155,24 @@ def make_system(args):
     # Lets gem5 itself read/write memory (e.g. to load the ELF segments).
     system.system_port = system.membus.cpu_side_ports
 
-    # Resolve binary path relative to final-project/ (one level up from configs/).
-    thispath = os.path.dirname(os.path.realpath(__file__))
-    bin_path = os.path.join(thispath, "..", args.binary)
+    # Resolve binary and data paths to absolute. Absolute paths in process.cmd
+    # mean SE-mode file I/O works regardless of where gem5 was launched from.
+    thispath     = os.path.dirname(os.path.realpath(__file__))
+    project_root = os.path.realpath(os.path.join(thispath, ".."))
+    bin_path     = os.path.join(project_root, args.binary)
+    data_dir     = os.path.join(project_root, "data")
+
+    # Common to both search binaries; dispatch on binary name for the rest.
+    cmd = [bin_path, "--queries", os.path.join(data_dir, "queries.bin")]
+    bin_name = os.path.basename(args.binary)
+    if "flat" in bin_name:
+        cmd += ["--vectors", os.path.join(data_dir, "vectors.bin")]
+    elif "hnsw" in bin_name:
+        cmd += ["--hnsw", os.path.join(data_dir, "hnsw.bin")]
 
     system.workload = SEWorkload.init_compatible(bin_path)
     process = Process()
-    process.cmd = [bin_path]
+    process.cmd = cmd
     system.cpu.workload = process
     system.cpu.createThreads()
 

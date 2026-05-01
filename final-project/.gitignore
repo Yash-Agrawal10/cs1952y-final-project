@@ -1,1 +1,3 @@
 binaries/
+data/
+__pycache__/
