@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
 #include <functional>
@@ -135,6 +136,7 @@ int main(int argc, char** argv) {
     uint64_t checksum = 0;
     std::vector<DistNode> first_query_results;
 
+    const auto t0 = std::chrono::steady_clock::now();
     M5_ROI_BEGIN();
     for (uint32_t q = 0; q < queries.N; ++q) {
         const auto results = hnsw_topk(g, queries.vec(q), args.k, args.ef, visited);
@@ -143,12 +145,16 @@ int main(int argc, char** argv) {
         if (q == 0) first_query_results = results;
     }
     M5_ROI_END();
+    const auto t1 = std::chrono::steady_clock::now();
 
     std::cout << "query[0] top-" << args.k << ":";
     for (const auto& [dist, idx] : first_query_results)
         std::cout << " " << idx << "(" << dist << ")";
     std::cout << "\n";
     std::cout << "checksum: " << checksum << "\n";
+
+    const auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count();
+    std::cout << "search_time_ns: " << ns << "\n";
 
     M5_EXIT();
     return 0;

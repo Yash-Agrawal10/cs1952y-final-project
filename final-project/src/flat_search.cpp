@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
@@ -78,20 +79,26 @@ int main(int argc, char** argv) {
     uint64_t checksum = 0;
     std::vector<std::pair<float, uint32_t>> first_query_results;
 
+    const auto t0 = std::chrono::steady_clock::now();
     M5_ROI_BEGIN();
     for (uint32_t q = 0; q < queries.N; ++q) {
         const auto results = flat_topk(db, queries.vec(q), args.k);
         for (const auto& [dist, idx] : results)
             checksum += idx;
-        if (q == 0) first_query_results = results;
+        if (q == 0)
+            first_query_results = results;
     }
     M5_ROI_END();
+    const auto t1 = std::chrono::steady_clock::now();
 
     std::cout << "query[0] top-" << args.k << ":";
     for (const auto& [dist, idx] : first_query_results)
         std::cout << " " << idx << "(" << dist << ")";
     std::cout << "\n";
     std::cout << "checksum: " << checksum << "\n";
+
+    const auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count();
+    std::cout << "search_time_ns: " << ns << "\n";
 
     M5_EXIT();
     return 0;
