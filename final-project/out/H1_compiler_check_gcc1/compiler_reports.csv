@@ -1,0 +1,2 @@
+compiler,vectorized_mentions,missed_mentions,report_path,excerpt_path
+gcc,6,133,/home/cs1952y-user/gem5/final-project/out/H1_compiler_check_gcc1/reports/gcc_build.log,/home/cs1952y-user/gem5/final-project/out/H1_compiler_check_gcc1/reports/gcc_vectorization_excerpt.txt

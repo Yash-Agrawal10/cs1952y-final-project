@@ -44,7 +44,7 @@ def main():
             ["make", "clean"],
             ["make", "host",
              "HOST_CXXFLAGS=-std=c++17 -O2 -Wall -Wextra",
-             "HOST_SIMD_CXXFLAGS=-std=c++17 -O2 -Wall -Wextra -O3 -ftree-vectorize"],
+             "HOST_SIMD_CXXFLAGS=-std=c++17 -O3 -Wall -Wextra -march=native -ftree-vectorize"],
         ]:
             rc, so, se = run(c)
             if rc != 0:

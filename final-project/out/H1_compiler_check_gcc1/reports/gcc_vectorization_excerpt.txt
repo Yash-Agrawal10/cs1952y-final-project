@@ -1,0 +1,144 @@
+g++ -std=c++17 -O2 -Wall -Wextra -fopt-info-vec-missed -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search
+g++ -std=c++17 -O3 -Wall -Wextra -march=native -ftree-vectorize -fopt-info-vec-optimized -fopt-info-vec-missed -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search_simd
+g++ -std=c++17 -O2 -Wall -Wextra -fopt-info-vec-missed -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search
+g++ -std=c++17 -O3 -Wall -Wextra -march=native -ftree-vectorize -fopt-info-vec-optimized -fopt-info-vec-missed -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search_simd
+src/flat_search.cpp:85:66: missed: couldn't vectorize loop
+src/flat_search.cpp:85:66: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+src/flat_search.cpp:66:5: missed: not vectorized: more than one data ref in stmt: *__cur_323 = *__first$_M_current_619;
+src/flat_search.cpp:66:5: missed: not vectorized: more than one data ref in stmt: *__cur_1019 = MEM[(const struct pair *)__first_763];
+src/flat_search.cpp:86:40: optimized: loop vectorized using 16 byte vectors
+src/flat_search.cpp:47:30: missed: couldn't vectorize loop
+src/flat_search.cpp:47:30: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+src/common/distance.hpp:8:28: optimized: loop vectorized using 16 byte vectors
+src/flat_search.cpp:24:39: missed: couldn't vectorize loop
+src/flat_search.cpp:24:39: missed: not vectorized: control flow in loop.
+src/flat_search.cpp:66:5: missed: splitting region at control altering definition _255 = std::__cxx11::basic_string<char>::_M_create (&MEM <struct string> [(void *)&args + 32B], &__dnew, 0);
+src/flat_search.cpp:33:14: missed: splitting region at control altering definition _219 = std::__ostream_insert<char, std::char_traits<char> > (&cerr, _216, _218);
+src/flat_search.cpp:36:54: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_219, "\n");
+src/flat_search.cpp:36:54: missed: splitting region at loop 4 exit at bb33
+src/flat_search.cpp:34:32: missed: splitting region at dominance boundary bb43
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 25
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 23
+src/flat_search.cpp:23:23: missed: splitting region at control altering definition db = load_vectors (&args.vectors_path); [return slot optimization]
+src/flat_search.cpp:69:56: missed: not vectorized: statement can throw an exception: db = load_vectors (&args.vectors_path); [return slot optimization]
+src/flat_search.cpp:69:56: missed: splitting region at control altering definition queries = load_vectors (&args.queries_path); [return slot optimization]
+src/flat_search.cpp:70:61: missed: not vectorized: statement can throw an exception: queries = load_vectors (&args.queries_path); [return slot optimization]
+src/flat_search.cpp:70:61: missed: splitting region at control altering definition _66 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _65);
+src/flat_search.cpp:77:116: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_73, "\n");
+src/flat_search.cpp:82:51: missed: statement clobbers memory: t0 = std::chrono::_V2::steady_clock::now ();
+src/flat_search.cpp:66:5: missed: not vectorized: more than one data ref in stmt: *prephitmp_1484 = MEM[(const struct pair *)prephitmp_1477];
+src/flat_search.cpp:58:12: missed: splitting region at dominance boundary bb191
+src/flat_search.cpp:58:12: missed: splitting region at control altering definition _676 = operator new (_631);
+src/flat_search.cpp:87:25: missed: not vectorized: more than one data ref in stmt: vect_array.614 = .LOAD_LANES (MEM <unsigned int[8]> [(const type &)vectp.612_1331]);
+src/flat_search.cpp:66:5: missed: not vectorized: more than one data ref in stmt: *__cur_1019 = MEM[(const struct pair *)__first_763];
+src/flat_search.cpp:66:5: missed: not vectorized: more than one data ref in stmt: *__cur_323 = *__first$_M_current_619;
+src/flat_search.cpp:84:28: missed: splitting region at dominance boundary bb232
+src/flat_search.cpp:84:28: missed: splitting region at control altering definition _90 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _89);
+src/flat_search.cpp:92:51: missed: statement clobbers memory: t1 = std::chrono::_V2::steady_clock::now ();
+src/flat_search.cpp:94:47: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_90, ":");
+src/flat_search.cpp:95:36: missed: splitting region at control altering definition _98 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, checksum_696);
+src/flat_search.cpp:97:18: missed: not vectorized: statement can throw an exception: std::operator<<.isra (&cout, "\n");
+src/flat_search.cpp:98:46: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_98, "\n");
+src/flat_search.cpp:101:46: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_102, "\n");
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 7
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 27
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 26
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 5
+src/flat_search.cpp:73:80: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_52, "\n");
+src/flat_search.cpp:73:80: missed: splitting region at dominance boundary bb88
+src/flat_search.cpp:105:1: missed: statement clobbers memory: Args::~Args (&args);
+src/flat_search.cpp:66:5: missed: splitting region at dominance boundary bb283
+src/flat_search.cpp:66:5: missed: splitting region at dominance boundary bb287
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 4
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 3
+src/flat_search.cpp:105:1: missed: statement clobbers memory: Args::~Args (&args);
+src/flat_search.cpp:105:1: missed: splitting region at dominance boundary bb18
+src/flat_search.cpp:105:1: missed: splitting region at control altering definition _192 = std::__ostream_insert<char, std::char_traits<char> > (&cerr, _189, _191);
+src/flat_search.cpp:26:58: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_192, "\n");
+src/flat_search.cpp:26:58: missed: splitting region at dominance boundary bb76
+src/flat_search.cpp:66:5: missed: not vectorized: statement can throw an exception: resx 22
+src/flat_search.cpp:41:1: missed: statement clobbers memory: Args::~Args (&args);
+src/flat_search.cpp:27:22: missed: statement clobbers memory: exit (1);
+src/hnsw_search.cpp:142:83: missed: couldn't vectorize loop
+src/hnsw_search.cpp:142:83: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+src/hnsw_search.cpp:143:40: optimized: loop vectorized using 16 byte vectors
+src/hnsw_search.cpp:115:5: missed: not vectorized: more than one data ref in stmt: *__cur_747 = *__first_526;
+src/hnsw_search.cpp:80:54: missed: couldn't vectorize loop
+src/hnsw_search.cpp:80:54: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+src/hnsw_search.cpp:87:34: missed: couldn't vectorize loop
+src/hnsw_search.cpp:87:34: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+src/common/distance.hpp:8:28: optimized: loop vectorized using 16 byte vectors
+src/hnsw_search.cpp:56:42: missed: couldn't vectorize loop
+src/hnsw_search.cpp:56:42: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized
+src/hnsw_search.cpp:61:32: missed: couldn't vectorize loop
+src/hnsw_search.cpp:61:32: missed: not vectorized: control flow in loop.
+src/common/distance.hpp:8:28: optimized: loop vectorized using 16 byte vectors
+src/common/distance.hpp:8:28: optimized: loop vectorized using 16 byte vectors
+src/hnsw_search.cpp:26:39: missed: couldn't vectorize loop
+src/hnsw_search.cpp:26:39: missed: not vectorized: control flow in loop.
+src/hnsw_search.cpp:115:5: missed: splitting region at control altering definition _301 = std::__cxx11::basic_string<char>::_M_create (&MEM <struct string> [(void *)&args + 32B], &__dnew, 0);
+src/hnsw_search.cpp:16:8: optimized: basic block part vectorized using 16 byte vectors
+src/hnsw_search.cpp:16:8: missed: splitting region at dominance boundary bb12
+src/hnsw_search.cpp:16:8: missed: splitting region at dominance boundary bb16
+src/hnsw_search.cpp:37:14: missed: splitting region at control altering definition _262 = std::__ostream_insert<char, std::char_traits<char> > (&cerr, _259, _261);
+src/hnsw_search.cpp:40:54: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_262, "\n");
+src/hnsw_search.cpp:40:54: missed: splitting region at loop 4 exit at bb59
+src/hnsw_search.cpp:38:33: missed: splitting region at dominance boundary bb69
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 34
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 30
+src/hnsw_search.cpp:36:32: missed: splitting region at dominance boundary bb43
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 33
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 31
+src/hnsw_search.cpp:25:23: missed: splitting region at dominance boundary bb117
+src/hnsw_search.cpp:118:5: missed: splitting region at control altering definition g = load_hnsw (&args.hnsw_path); [return slot optimization]
+src/hnsw_search.cpp:123:49: missed: not vectorized: statement can throw an exception: g = load_hnsw (&args.hnsw_path); [return slot optimization]
+src/hnsw_search.cpp:123:49: missed: splitting region at control altering definition queries = load_vectors (&args.queries_path); [return slot optimization]
+src/hnsw_search.cpp:124:61: missed: not vectorized: statement can throw an exception: queries = load_vectors (&args.queries_path); [return slot optimization]
+src/hnsw_search.cpp:124:61: missed: splitting region at control altering definition _88 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _87);
+src/hnsw_search.cpp:132:107: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_101, "\n");
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 35
+src/hnsw_search.cpp:139:51: missed: statement clobbers memory: t0 = std::chrono::_V2::steady_clock::now ();
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 39
+src/hnsw_search.cpp:115:5: missed: not vectorized: more than one data ref in stmt: *_974 = MEM[(const struct pair *)_529];
+src/hnsw_search.cpp:115:5: missed: not vectorized: more than one data ref in stmt: *__cur_747 = *__first_526;
+src/hnsw_search.cpp:115:5: missed: not vectorized: more than one data ref in stmt: *results$_M_finish_1129 = MEM[(const struct pair *)_529];
+src/hnsw_search.cpp:105:12: missed: splitting region at dominance boundary bb339
+src/hnsw_search.cpp:144:25: missed: not vectorized: more than one data ref in stmt: vect_array.1141 = .LOAD_LANES (MEM <unsigned int[8]> [(const type &)vectp_results__M_start.1139_2022]);
+src/hnsw_search.cpp:115:5: missed: statement clobbers memory: __builtin_memcpy (first_query_results$_M_finish_19, _1128, _2284);
+src/hnsw_search.cpp:115:5: missed: statement clobbers memory: __builtin_memcpy (iftmp.88_1114, results$_M_start_608, _2243);
+src/hnsw_search.cpp:141:28: missed: splitting region at control altering definition _118 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, _117);
+src/hnsw_search.cpp:148:51: missed: statement clobbers memory: t1 = std::chrono::_V2::steady_clock::now ();
+src/hnsw_search.cpp:150:47: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_118, ":");
+src/hnsw_search.cpp:151:36: missed: splitting region at control altering definition _126 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cout, checksum_1230);
+src/hnsw_search.cpp:153:18: missed: not vectorized: statement can throw an exception: std::operator<<.isra (&cout, "\n");
+src/hnsw_search.cpp:154:46: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_126, "\n");
+src/hnsw_search.cpp:157:46: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_130, "\n");
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 13
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 38
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 37
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 36
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 11
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 10
+src/hnsw_search.cpp:127:78: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_86, "\n");
+src/hnsw_search.cpp:127:78: missed: splitting region at dominance boundary bb129
+src/hnsw_search.cpp:161:1: missed: statement clobbers memory: HnswGraph::~HnswGraph (&g);
+src/hnsw_search.cpp:161:1: missed: splitting region at dominance boundary bb441
+src/hnsw_search.cpp:161:1: missed: splitting region at dominance boundary bb445
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 4
+src/hnsw_search.cpp:161:1: missed: statement clobbers memory: HnswGraph::~HnswGraph (&g);
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 3
+src/hnsw_search.cpp:161:1: missed: splitting region at dominance boundary bb108
+src/hnsw_search.cpp:161:1: missed: splitting region at control altering definition _60 = std::basic_ostream<char>::_M_insert<long unsigned int> (&cerr, _56);
+src/hnsw_search.cpp:119:75: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_68, ")\n");
+src/hnsw_search.cpp:119:75: missed: splitting region at dominance boundary bb116
+src/hnsw_search.cpp:161:1: missed: statement clobbers memory: Args::~Args (&args);
+src/hnsw_search.cpp:115:5: missed: splitting region at dominance boundary bb449
+src/hnsw_search.cpp:115:5: missed: splitting region at dominance boundary bb505
+src/hnsw_search.cpp:161:1: missed: statement clobbers memory: Args::~Args (&args);
+src/hnsw_search.cpp:161:1: missed: splitting region at dominance boundary bb18
+src/hnsw_search.cpp:161:1: missed: splitting region at control altering definition _224 = std::__ostream_insert<char, std::char_traits<char> > (&cerr, _221, _223);
+src/hnsw_search.cpp:28:58: missed: not vectorized: statement can throw an exception: std::operator<<.isra (_224, "\n");
+src/hnsw_search.cpp:28:58: missed: splitting region at dominance boundary bb106
+src/hnsw_search.cpp:115:5: missed: not vectorized: statement can throw an exception: resx 29
+src/hnsw_search.cpp:45:1: missed: statement clobbers memory: Args::~Args (&args);
+src/hnsw_search.cpp:29:22: missed: statement clobbers memory: exit (1);
