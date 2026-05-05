@@ -1,4 +1,5 @@
 binaries/
 data/
 __pycache__/
+faiss/
 
