@@ -1,0 +1,24 @@
+Global frequency set at 1000000000000 ticks per second
+warn: No dot file generated. Please install pydot to generate the dot file and pdf.
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (4096 Mbytes)
+src/arch/riscv/isa.cc:275: info: RVV enabled, VLEN = 256 bits, ELEN = 64 bits
+src/arch/riscv/linux/se_workload.cc:60: warn: Unknown operating system; assuming Linux.
+src/base/statistics.hh:279: warn: One of the stats is a legacy stat. Legacy stat is a stat that does not belong to any statistics::Group. Legacy stat is deprecated.
+src/base/statistics.hh:279: warn: One of the stats is a legacy stat. Legacy stat is a stat that does not belong to any statistics::Group. Legacy stat is deprecated.
+system.remote_gdb: Listening for connections on port 7001
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version 23.1.0.0
+gem5 compiled Jan 19 2026 17:48:39
+gem5 started May  4 2026 03:08:50
+gem5 executing on 9701bc46ba4f, pid 242
+command line: /gem5_build/gem5.debug -d out/h3_hnsw_minor configs/run.py --binary binaries/riscv/hnsw_search --cpu_type minor --l2_size 256kB
+
+Beginning simulation!
+src/sim/simulate.cc:199: info: Entering event queue @ 0.  Starting simulation...
+hnsw search: db_N=2000 queries_N=20 D=128 K=10 ef=50 max_level=3 entry_point=481
+query[0] top-10: 1661(171.797) 1046(172.673) 987(179.801) 1403(179.941) 595(182.421) 868(186.995) 381(188.77) 788(191.379) 896(192.091) 848(192.922)
+checksum: 199096
+search_time_ns: 19929000
+Exiting @ tick 22630001000 because m5_exit instruction encountered

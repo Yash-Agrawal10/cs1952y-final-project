@@ -2,12 +2,12 @@ $ make clean
 [rc=0]
 rm -rf binaries
 
-$ make host HOST_CXX=clang++ HOST_CXXFLAGS=-std=c++17 -O2 -Wall -Wextra -Rpass-missed=loop-vectorize HOST_SIMD_CXXFLAGS=-std=c++17 -O3 -Wall -Wextra -mcpu=native -Rpass=loop-vectorize -Rpass-missed=loop-vectorize
+$ make host HOST_CXX=clang++ HOST_CXXFLAGS=-std=c++17 -O3 -Wall -Wextra -fno-vectorize -fno-slp-vectorize -Rpass-missed=loop-vectorize HOST_SIMD_CXXFLAGS=-std=c++17 -O3 -Wall -Wextra -mcpu=native -Rpass=loop-vectorize -Rpass-missed=loop-vectorize
 [rc=0]
-clang++ -std=c++17 -O2 -Wall -Wextra -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/host/gen_data.cpp -o binaries/host/gen_data
-clang++ -std=c++17 -O2 -Wall -Wextra -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search
+clang++ -std=c++17 -O3 -Wall -Wextra -fno-vectorize -fno-slp-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/host/gen_data.cpp -o binaries/host/gen_data
+clang++ -std=c++17 -O3 -Wall -Wextra -fno-vectorize -fno-slp-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search
 clang++ -std=c++17 -O3 -Wall -Wextra -mcpu=native -Rpass=loop-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search_simd
-clang++ -std=c++17 -O2 -Wall -Wextra -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search
+clang++ -std=c++17 -O3 -Wall -Wextra -fno-vectorize -fno-slp-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search
 clang++ -std=c++17 -O3 -Wall -Wextra -mcpu=native -Rpass=loop-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search_simd
 src/host/gen_data.cpp:106:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
     for (int i = 1; i < argc; ++i) {
@@ -17,12 +17,22 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:330:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       for (size_t __i = 1; __i < state_size; ++__i)
       ^
+src/host/gen_data.cpp:26:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+    for (auto& x : v)
+    ^
+src/host/gen_data.cpp:26:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 src/host/gen_data.cpp:37:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
     for (uint32_t i = 0; i < N; ++i) {
     ^
 src/host/gen_data.cpp:51:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
     for (uint32_t i = 0; i < N; ++i)
     ^
+src/host/gen_data.cpp:60:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        for (unsigned int j = 0; j < count; ++j)
+        ^
+src/host/gen_data.cpp:73:17: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+                for (unsigned int j = 0; j < count; ++j)
+                ^
 In file included from src/host/gen_data.cpp:3:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/filesystem:44:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/fs_fwd.h:35:
@@ -33,25 +43,21 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:1161:4: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
           for (; __first1 != __last1; ++__first1, (void) ++__first2)
           ^
-src/host/gen_data.cpp:26:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-    for (auto& x : v)
-    ^
-In file included from src/host/gen_data.cpp:3:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/filesystem:44:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/fs_fwd.h:35:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/system_error:41:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/stdexcept:39:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/string:40:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/char_traits.h:39:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:1161:4: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-          for (; __first1 != __last1; ++__first1, (void) ++__first2)
-          ^
 In file included from src/host/gen_data.cpp:5:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:51:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:3364:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      for (size_t __k = __m; __k != 0; --__k)
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:409:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (size_t __k = (__n - __m); __k < (__n - 1); ++__k)
       ^
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:3364:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:401:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (size_t __k = 0; __k < (__n - __m); ++__k)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:409:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (size_t __k = (__n - __m); __k < (__n - 1); ++__k)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:401:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (size_t __k = 0; __k < (__n - __m); ++__k)
+      ^
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:226:
 In file included from third_party/hnswlib/stop_condition.h:5:
@@ -59,6 +65,8 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       for (__node_ptr __p = static_cast<__node_ptr>(__prev_p->_M_nxt);;
       ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:226:
 In file included from third_party/hnswlib/stop_condition.h:5:
@@ -68,6 +76,11 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
       while (__n)
       ^
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable_policy.h:1912:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:224:
+third_party/hnswlib/space_l2.h:13:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+    for (size_t i = 0; i < qty; i++) {
+    ^
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:228:
 In file included from third_party/hnswlib/hnswalg.h:3:
@@ -91,12 +104,12 @@ third_party/hnswlib/hnswalg.h:1289:17: remark: loop not vectorized [-Rpass-misse
 third_party/hnswlib/hnswalg.h:1314:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
         while (top_candidates.size() > k) {
         ^
+third_party/hnswlib/hnswalg.h:1317:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        while (top_candidates.size() > 0) {
+        ^
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:119:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
-      ^
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:327:11: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       if (__last - __first > 1)
           ^
@@ -131,30 +144,13 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_deque.h:678:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       for (_Map_pointer __n = __nstart; __n < __nfinish; ++__n)
       ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:119:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
       ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:228:
-third_party/hnswlib/hnswalg.h:420:25: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-                        while (flag_remove_extra) {
-                        ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:119:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
-      ^
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:228:
-third_party/hnswlib/hnswalg.h:420:25: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-                        while (flag_remove_extra) {
-                        ^
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:119:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
@@ -175,8 +171,100 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       for (; __first != __last; ++__first, (void)++__cur)
       ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:578:8: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+              for (; __n > 0; --__n, (void) ++__cur)
+              ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:578:8: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:119:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
@@ -205,27 +293,13 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
       ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:226:
-In file included from third_party/hnswlib/stop_condition.h:5:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/unordered_map:46:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:35:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable_policy.h:1912:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__n)
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
       ^
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable_policy.h:1912:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:228:
-third_party/hnswlib/hnswalg.h:1061:21: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-                    for (size_t idx = 0; idx < candSize; idx++) {
-                    ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:119:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
-      ^
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:226:
 In file included from third_party/hnswlib/stop_condition.h:5:
@@ -233,10 +307,6 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       for (__node_ptr __p = static_cast<__node_ptr>(__prev_p->_M_nxt);;
       ^
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:226:
 In file included from third_party/hnswlib/stop_condition.h:5:
@@ -246,56 +316,6 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
       while (__n)
       ^
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable_policy.h:1912:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-In file included from src/host/gen_data.cpp:5:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:51:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:3364:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      for (size_t __k = __m; __k != 0; --__k)
-      ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:119:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
-      ^
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-In file included from src/host/gen_data.cpp:5:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:67:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h:1189:6: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-        if (this->_M_impl._M_finish != this->_M_impl._M_end_of_storage)
-            ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:228:
-third_party/hnswlib/hnswalg.h:544:13: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-            for (size_t idx = 0; idx < selectedNeighbors.size(); idx++) {
-            ^
-third_party/hnswlib/hnswalg.h:606:21: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-                    while (candidates.size() > 0) {
-                    ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:119:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
-      ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:228:
-third_party/hnswlib/hnswalg.h:576:17: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-                for (size_t j = 0; j < sz_link_list_other; j++) {
-                ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:119:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
-      ^
-In file included from src/host/gen_data.cpp:9:
-In file included from third_party/hnswlib/hnswlib.h:228:
-third_party/hnswlib/hnswalg.h:465:13: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-            for (std::pair<dist_t, tableint> second_pair : return_list) {
-            ^
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:119:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
@@ -308,6 +328,35 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
       ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:226:
 In file included from third_party/hnswlib/stop_condition.h:5:
@@ -316,6 +365,159 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
       for (__node_ptr __p = static_cast<__node_ptr>(__prev_p->_M_nxt);;
       ^
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:51:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:3364:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (size_t __k = __m; __k != 0; --__k)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:226:
+In file included from third_party/hnswlib/stop_condition.h:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/unordered_map:46:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (__node_ptr __p = static_cast<__node_ptr>(__prev_p->_M_nxt);;
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:1837:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:226:
+In file included from third_party/hnswlib/stop_condition.h:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/unordered_map:46:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:35:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable_policy.h:1912:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__n)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable_policy.h:1912:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:51:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:3364:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (size_t __k = __m; __k != 0; --__k)
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:228:
+third_party/hnswlib/hnswalg.h:519:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        while (top_candidates.size() > 0) {
+        ^
+third_party/hnswlib/hnswalg.h:544:13: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+            for (size_t idx = 0; idx < selectedNeighbors.size(); idx++) {
+            ^
+third_party/hnswlib/hnswalg.h:544:13: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:228:
+third_party/hnswlib/hnswalg.h:576:17: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+                for (size_t j = 0; j < sz_link_list_other; j++) {
+                ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:228:
+third_party/hnswlib/hnswalg.h:465:13: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+            for (std::pair<dist_t, tableint> second_pair : return_list) {
+            ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:226:
+In file included from third_party/hnswlib/stop_condition.h:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/unordered_map:46:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:2386:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       while (__p)
       ^
@@ -324,13 +526,39 @@ In file included from third_party/hnswlib/hnswlib.h:228:
 third_party/hnswlib/hnswalg.h:1094:21: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
                     for (int i = 0; i < size; i++) {
                     ^
+third_party/hnswlib/hnswalg.h:1094:21: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:119:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
       ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/host/gen_data.cpp:9:
+In file included from third_party/hnswlib/hnswlib.h:119:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/queue:62:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/host/gen_data.cpp:5:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:49:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.h:34:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:226:
 In file included from third_party/hnswlib/stop_condition.h:5:
@@ -338,11 +566,19 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/hashtable.h:2386:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       while (__p)
       ^
-In file included from src/host/gen_data.cpp:5:
-In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/random:51:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/random.tcc:3364:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      for (size_t __k = __m; __k != 0; --__k)
+In file included from src/host/gen_data.cpp:3:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/filesystem:44:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/fs_fwd.h:35:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/system_error:41:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/stdexcept:39:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/string:40:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/char_traits.h:39:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:923:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first)
       ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:923:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:923:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:923:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 In file included from src/host/gen_data.cpp:9:
 In file included from third_party/hnswlib/hnswlib.h:228:
 third_party/hnswlib/hnswalg.h:154:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
@@ -351,6 +587,9 @@ third_party/hnswlib/hnswalg.h:154:9: remark: loop not vectorized [-Rpass-missed=
 src/flat_search.cpp:23:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
     for (int i = 1; i < argc; ++i) {
     ^
+src/flat_search.cpp:86:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        for (const auto& [dist, idx] : results)
+        ^
 In file included from src/flat_search.cpp:1:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:1122:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
@@ -362,10 +601,66 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
       ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
+In file included from src/flat_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:74:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/pstl/glue_algorithm_defs.h:13:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/functional:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/flat_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:61:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/flat_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:74:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/pstl/glue_algorithm_defs.h:13:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/functional:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/flat_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:61:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/flat_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:74:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/pstl/glue_algorithm_defs.h:13:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/functional:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/flat_search.cpp:11:
+src/common/distance.hpp:8:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+    for (uint32_t i = 0; i < D; ++i) {
+    ^
 src/flat_search.cpp:95:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
     for (const auto& [dist, idx] : first_query_results)
     ^
+In file included from src/flat_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:61:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:383:4: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+          for(_Distance __n = __last - __first; __n > 0; --__n)
+          ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:383:4: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/flat_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:74:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/pstl/glue_algorithm_defs.h:13:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/functional:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:91:8: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+              for (; __first != __last; ++__first, (void)++__cur)
+              ^
 In file included from src/flat_search.cpp:1:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:61:
@@ -464,6 +759,9 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 src/hnsw_search.cpp:25:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
     for (int i = 1; i < argc; ++i) {
     ^
+src/hnsw_search.cpp:143:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        for (const auto& [dist, idx] : results)
+        ^
 In file included from src/hnsw_search.cpp:1:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:1122:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
@@ -475,25 +773,96 @@ In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../inclu
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
       ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
+In file included from src/hnsw_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:74:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/pstl/glue_algorithm_defs.h:13:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/functional:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/hnsw_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:61:
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/hnsw_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:74:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/pstl/glue_algorithm_defs.h:13:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/functional:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/hnsw_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:61:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+In file included from src/hnsw_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:74:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/pstl/glue_algorithm_defs.h:13:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/functional:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:1031:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      for (; __first != __last; ++__first, (void)++__cur)
+      ^
+In file included from src/hnsw_search.cpp:12:
+src/common/distance.hpp:8:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+    for (uint32_t i = 0; i < D; ++i) {
+    ^
 In file included from src/hnsw_search.cpp:13:
 In file included from src/common/io.hpp:10:
 src/common/data.hpp:42:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
         while (end != begin + cap && *end != HNSW_NEIGHBOR_SENTINEL)
         ^
+In file included from src/hnsw_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:61:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
+      ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+      while (__secondChild < (__len - 1) / 2)
+      ^
+In file included from src/hnsw_search.cpp:12:
+src/common/distance.hpp:8:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+    for (uint32_t i = 0; i < D; ++i) {
+    ^
+In file included from src/hnsw_search.cpp:13:
+In file included from src/common/io.hpp:10:
 src/common/data.hpp:42:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        while (end != begin + cap && *end != HNSW_NEIGHBOR_SENTINEL)
+        ^
+In file included from src/hnsw_search.cpp:12:
+src/common/distance.hpp:8:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+    for (uint32_t i = 0; i < D; ++i) {
+    ^
 src/hnsw_search.cpp:151:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
     for (const auto& [dist, idx] : first_query_results)
     ^
 In file included from src/hnsw_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:61:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:383:4: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+          for(_Distance __n = __last - __first; __n > 0; --__n)
+          ^
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algobase.h:383:4: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/hnsw_search.cpp:1:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:74:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/pstl/glue_algorithm_defs.h:13:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/functional:62:
+In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/vector:66:
+/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_uninitialized.h:91:8: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+              for (; __first != __last; ++__first, (void)++__cur)
+              ^
+In file included from src/hnsw_search.cpp:1:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/algorithm:62:
 In file included from /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_algo.h:61:
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__secondChild < (__len - 1) / 2)
-      ^
-/usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:139:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-      while (__holeIndex > __topIndex && __comp(__first + __parent, __value))
-      ^
 /usr/bin/../lib/gcc/aarch64-linux-gnu/11/../../../../include/c++/11/bits/stl_heap.h:228:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
       while (__secondChild < (__len - 1) / 2)
       ^

@@ -1,3 +1,3 @@
 compiler,vectorized_mentions,missed_mentions,report_path,excerpt_path
-gcc,6,133,/home/cs1952y-user/gem5/final-project/out/H1_compiler_check/reports/gcc_build.log,/home/cs1952y-user/gem5/final-project/out/H1_compiler_check/reports/gcc_vectorization_excerpt.txt
-clang,6,8,/home/cs1952y-user/gem5/final-project/out/H1_compiler_check/reports/clang_build.log,/home/cs1952y-user/gem5/final-project/out/H1_compiler_check/reports/clang_vectorization_excerpt.txt
+gcc,6,133,/home/cs1952y-user/final/final-project/out/H1_compiler_check/reports/gcc_build.log,/home/cs1952y-user/final/final-project/out/H1_compiler_check/reports/gcc_vectorization_excerpt.txt
+clang,6,14,/home/cs1952y-user/final/final-project/out/H1_compiler_check/reports/clang_build.log,/home/cs1952y-user/final/final-project/out/H1_compiler_check/reports/clang_vectorization_excerpt.txt

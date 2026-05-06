@@ -1,6 +1,6 @@
-g++ -std=c++17 -O2 -Wall -Wextra -fopt-info-vec-missed -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search
+g++ -std=c++17 -O3 -Wall -Wextra -fno-tree-vectorize -fno-tree-slp-vectorize -fopt-info-vec-missed -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search
 g++ -std=c++17 -O3 -Wall -Wextra -march=native -ftree-vectorize -fopt-info-vec-optimized -fopt-info-vec-missed -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search_simd
-g++ -std=c++17 -O2 -Wall -Wextra -fopt-info-vec-missed -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search
+g++ -std=c++17 -O3 -Wall -Wextra -fno-tree-vectorize -fno-tree-slp-vectorize -fopt-info-vec-missed -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search
 g++ -std=c++17 -O3 -Wall -Wextra -march=native -ftree-vectorize -fopt-info-vec-optimized -fopt-info-vec-missed -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search_simd
 src/flat_search.cpp:85:66: missed: couldn't vectorize loop
 src/flat_search.cpp:85:66: missed: not vectorized: loop nest containing two or more consecutive inner loops cannot be vectorized

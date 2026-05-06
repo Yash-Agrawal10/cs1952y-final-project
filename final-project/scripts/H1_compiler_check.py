@@ -31,13 +31,13 @@ def compiler_tag(compiler):
 
 def report_flags(tag):
     if tag == "gcc":
-        scalar = "-std=c++17 -O2 -Wall -Wextra -fopt-info-vec-missed"
+        scalar = "-std=c++17 -O3 -Wall -Wextra -fno-tree-vectorize -fno-tree-slp-vectorize -fopt-info-vec-missed"
         simd = "-std=c++17 -O3 -Wall -Wextra -march=native -ftree-vectorize -fopt-info-vec-optimized -fopt-info-vec-missed"
     elif tag == "clang":
-        scalar = "-std=c++17 -O2 -Wall -Wextra -Rpass-missed=loop-vectorize"
+        scalar = "-std=c++17 -O3 -Wall -Wextra -fno-vectorize -fno-slp-vectorize -Rpass-missed=loop-vectorize"
         simd = "-std=c++17 -O3 -Wall -Wextra -mcpu=native -Rpass=loop-vectorize -Rpass-missed=loop-vectorize"
     else:
-        scalar = "-std=c++17 -O2 -Wall -Wextra"
+        scalar = "-std=c++17 -O3 -Wall -Wextra"
         simd = "-std=c++17 -O3 -Wall -Wextra -march=native -ftree-vectorize"
     return scalar, simd
 

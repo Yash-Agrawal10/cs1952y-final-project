@@ -1,11 +1,21 @@
-clang++ -std=c++17 -O2 -Wall -Wextra -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search
+clang++ -std=c++17 -O3 -Wall -Wextra -fno-vectorize -fno-slp-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search
 clang++ -std=c++17 -O3 -Wall -Wextra -mcpu=native -Rpass=loop-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/flat_search.cpp -o binaries/host/flat_search_simd
-clang++ -std=c++17 -O2 -Wall -Wextra -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search
+clang++ -std=c++17 -O3 -Wall -Wextra -fno-vectorize -fno-slp-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search
 clang++ -std=c++17 -O3 -Wall -Wextra -mcpu=native -Rpass=loop-vectorize -Rpass-missed=loop-vectorize -Isrc -isystem third_party src/hnsw_search.cpp -o binaries/host/hnsw_search_simd
 src/flat_search.cpp:23:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+src/flat_search.cpp:86:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 In file included from src/flat_search.cpp:1:
 In file included from src/flat_search.cpp:1:
+In file included from src/flat_search.cpp:1:
+In file included from src/flat_search.cpp:1:
+In file included from src/flat_search.cpp:1:
+In file included from src/flat_search.cpp:1:
+In file included from src/flat_search.cpp:1:
+In file included from src/flat_search.cpp:11:
+src/common/distance.hpp:8:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 src/flat_search.cpp:95:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/flat_search.cpp:1:
+In file included from src/flat_search.cpp:1:
 In file included from src/flat_search.cpp:1:
 src/flat_search.cpp:23:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 src/flat_search.cpp:86:9: remark: vectorized loop (vectorization width: 2, interleaved count: 2) [-Rpass=loop-vectorize]
@@ -23,10 +33,26 @@ In file included from src/flat_search.cpp:1:
 In file included from src/flat_search.cpp:1:
 In file included from src/flat_search.cpp:1:
 src/hnsw_search.cpp:25:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+src/hnsw_search.cpp:143:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 In file included from src/hnsw_search.cpp:1:
 In file included from src/hnsw_search.cpp:1:
+In file included from src/hnsw_search.cpp:1:
+In file included from src/hnsw_search.cpp:1:
+In file included from src/hnsw_search.cpp:1:
+In file included from src/hnsw_search.cpp:1:
+In file included from src/hnsw_search.cpp:1:
+In file included from src/hnsw_search.cpp:12:
+src/common/distance.hpp:8:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 In file included from src/hnsw_search.cpp:13:
+In file included from src/hnsw_search.cpp:1:
+In file included from src/hnsw_search.cpp:12:
+src/common/distance.hpp:8:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/hnsw_search.cpp:13:
+In file included from src/hnsw_search.cpp:12:
+src/common/distance.hpp:8:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 src/hnsw_search.cpp:151:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from src/hnsw_search.cpp:1:
+In file included from src/hnsw_search.cpp:1:
 In file included from src/hnsw_search.cpp:1:
 src/hnsw_search.cpp:25:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
 src/hnsw_search.cpp:143:9: remark: vectorized loop (vectorization width: 2, interleaved count: 2) [-Rpass=loop-vectorize]
